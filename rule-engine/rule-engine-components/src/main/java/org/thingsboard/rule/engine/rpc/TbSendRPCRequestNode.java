@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.security.SecureRandom;
 import lombok.extern.slf4j.Slf4j;
 import org.thingsboard.rule.engine.api.RuleEngineDeviceRpcRequest;
 import org.thingsboard.rule.engine.api.RuleNode;
@@ -55,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class TbSendRPCRequestNode implements TbNode {
 
-    private Random random = new Random();
+    private Random random = new SecureRandom();
     private Gson gson = new Gson();
     private TbSendRpcRequestNodeConfiguration config;
 

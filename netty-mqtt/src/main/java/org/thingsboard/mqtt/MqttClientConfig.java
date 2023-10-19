@@ -19,6 +19,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.mqtt.MqttVersion;
 import io.netty.handler.ssl.SslContext;
+import java.security.SecureRandom;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,7 +54,7 @@ public final class MqttClientConfig {
 
     public MqttClientConfig(SslContext sslContext) {
         this.sslContext = sslContext;
-        Random random = new Random();
+        Random random = new SecureRandom();
         String id = "netty-mqtt/";
         String[] options = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
         for(int i = 0; i < 8; i++){

@@ -16,6 +16,7 @@
 package org.thingsboard.server.transport.coap;
 
 import com.google.gson.JsonParseException;
+import java.security.SecureRandom;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.Request;
@@ -81,7 +82,7 @@ public class CoapTransportResource extends AbstractCoapTransportResource {
         this.piggybackTimeout = coapServerService.getPiggybackTimeout();
         this.clients = ctx.getClientContext();
         long sessionReportTimeout = ctx.getSessionReportTimeout();
-        ctx.getScheduler().scheduleAtFixedRate(clients::reportActivity, new Random().nextInt((int) sessionReportTimeout), sessionReportTimeout, TimeUnit.MILLISECONDS);
+        ctx.getScheduler().scheduleAtFixedRate(clients::reportActivity, new SecureRandom().nextInt((int) sessionReportTimeout), sessionReportTimeout, TimeUnit.MILLISECONDS);
     }
 
     /*

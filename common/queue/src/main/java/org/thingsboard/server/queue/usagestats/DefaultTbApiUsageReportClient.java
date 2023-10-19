@@ -15,6 +15,7 @@
  */
 package org.thingsboard.server.queue.usagestats;
 
+import java.security.SecureRandom;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,7 @@ public class DefaultTbApiUsageReportClient implements TbApiUsageReportClient {
                 } catch (Exception e) {
                     log.warn("Failed to report statistics: ", e);
                 }
-            }, new Random().nextInt(interval), interval, TimeUnit.SECONDS);
+            }, new SecureRandom().nextInt(interval), interval, TimeUnit.SECONDS);
         }
     }
 
