@@ -15,6 +15,7 @@
  */
 package org.thingsboard.server.coapserver;
 
+import java.security.SecureRandom;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.config.CoapConfig;
@@ -126,7 +127,7 @@ public class DefaultCoapServerService implements CoapServerService {
             server.addEndpoint(dtlsCoapEndpoint);
             tbDtlsCertificateVerifier = (TbCoapDtlsCertificateVerifier) dtlsConnectorConfig.getAdvancedCertificateVerifier();
             dtlsSessionsExecutor = Executors.newSingleThreadScheduledExecutor(ThingsBoardThreadFactory.forName(getClass().getSimpleName()));
-            dtlsSessionsExecutor.scheduleAtFixedRate(this::evictTimeoutSessions, new Random().nextInt((int) getDtlsSessionReportTimeout()), getDtlsSessionReportTimeout(), TimeUnit.MILLISECONDS);
+            dtlsSessionsExecutor.scheduleAtFixedRate(this::evictTimeoutSessions, new SecureRandom().nextInt((int) getDtlsSessionReportTimeout()), getDtlsSessionReportTimeout(), TimeUnit.MILLISECONDS);
         }
         Resource root = server.getRoot();
         TbCoapServerMessageDeliverer messageDeliverer = new TbCoapServerMessageDeliverer(root);

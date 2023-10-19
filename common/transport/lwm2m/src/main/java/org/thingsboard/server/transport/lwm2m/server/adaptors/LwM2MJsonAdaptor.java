@@ -17,6 +17,7 @@ package org.thingsboard.server.transport.lwm2m.server.adaptors;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
+import java.security.SecureRandom;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.thingsboard.server.common.transport.adaptor.AdaptorException;
@@ -54,7 +55,7 @@ public class LwM2MJsonAdaptor implements LwM2MTransportAdaptor  {
     public TransportProtos.GetAttributeRequestMsg convertToGetAttributes(Collection<String> clientKeys, Collection<String> sharedKeys) throws AdaptorException {
         try {
             TransportProtos.GetAttributeRequestMsg.Builder result = TransportProtos.GetAttributeRequestMsg.newBuilder();
-            Random random = new Random();
+            Random random = new SecureRandom();
             result.setRequestId(random.nextInt());
             if (clientKeys != null) {
                 result.addAllClientAttributeNames(clientKeys);
