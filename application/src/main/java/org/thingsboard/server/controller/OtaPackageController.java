@@ -15,6 +15,7 @@
  */
 package org.thingsboard.server.controller;
 
+import io.github.pixee.security.Filenames;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -172,7 +173,7 @@ public class OtaPackageController extends BaseController {
         ChecksumAlgorithm checksumAlgorithm = ChecksumAlgorithm.valueOf(checksumAlgorithmStr.toUpperCase());
         byte[] data = file.getBytes();
         return tbOtaPackageService.saveOtaPackageData(otaPackageInfo, checksum, checksumAlgorithm,
-                data, file.getOriginalFilename(), file.getContentType(), getCurrentUser());
+                data, Filenames.toSimpleFileName(file.getOriginalFilename()), file.getContentType(), getCurrentUser());
     }
 
     @ApiOperation(value = "Get OTA Package Infos (getOtaPackages)",
