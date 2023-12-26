@@ -56,7 +56,7 @@ public class RelatedEntitiesParser {
     }
 
     private boolean isBlockFinished(String line) {
-        return StringUtils.isBlank(line) || line.equals("\\.");
+        return StringUtils.isBlank(line) || "\\.".equals(line);
     }
 
     private void processAllTables(LineIterator lineIterator) throws IOException {

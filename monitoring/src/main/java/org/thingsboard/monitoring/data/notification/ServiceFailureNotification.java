@@ -34,7 +34,7 @@ public class ServiceFailureNotification implements Notification {
     @Override
     public String getText() {
         String errorMsg = error.getMessage();
-        if (errorMsg == null || errorMsg.equals("null")) {
+        if (errorMsg == null || "null".equals(errorMsg)) {
             Throwable cause = ExceptionUtils.getRootCause(error);
             if (cause != null) {
                 errorMsg = cause.getMessage();

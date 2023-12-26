@@ -108,7 +108,7 @@ public class CassandraEntitiesToSqlMigrateService implements EntitiesMigrateServ
             @Override
             protected boolean onConstraintViolation(List<CassandraToSqlColumnData[]> batchData,
                                                     CassandraToSqlColumnData[] data, String constraint) {
-                if (constraint.equalsIgnoreCase("asset_name_unq_key")) {
+                if ("asset_name_unq_key".equalsIgnoreCase(constraint)) {
                     this.handleUniqueNameViolation(data, "asset");
                     return true;
                 }
@@ -151,7 +151,7 @@ public class CassandraEntitiesToSqlMigrateService implements EntitiesMigrateServ
             @Override
             protected boolean onConstraintViolation(List<CassandraToSqlColumnData[]> batchData,
                                                     CassandraToSqlColumnData[] data, String constraint) {
-                if (constraint.equalsIgnoreCase("component_descriptor_clazz_key")) {
+                if ("component_descriptor_clazz_key".equalsIgnoreCase(constraint)) {
                     String clazz = this.getColumnData(data, "clazz").getValue();
                     log.warn("Found component_descriptor record with duplicate clazz [{}]. Record will be ignored!", clazz);
                     this.ignoreRecord(batchData, data);
@@ -193,7 +193,7 @@ public class CassandraEntitiesToSqlMigrateService implements EntitiesMigrateServ
             @Override
             protected boolean onConstraintViolation(List<CassandraToSqlColumnData[]> batchData,
                                                     CassandraToSqlColumnData[] data, String constraint) {
-                if (constraint.equalsIgnoreCase("device_name_unq_key")) {
+                if ("device_name_unq_key".equalsIgnoreCase(constraint)) {
                     this.handleUniqueNameViolation(data, "device");
                     return true;
                 }
@@ -236,7 +236,7 @@ public class CassandraEntitiesToSqlMigrateService implements EntitiesMigrateServ
             @Override
             protected boolean onConstraintViolation(List<CassandraToSqlColumnData[]> batchData,
                                                     CassandraToSqlColumnData[] data, String constraint) {
-                if (constraint.equalsIgnoreCase("tb_user_email_key")) {
+                if ("tb_user_email_key".equalsIgnoreCase(constraint)) {
                     this.handleUniqueEmailViolation(data);
                     return true;
                 }
@@ -269,7 +269,7 @@ public class CassandraEntitiesToSqlMigrateService implements EntitiesMigrateServ
             @Override
             protected boolean onConstraintViolation(List<CassandraToSqlColumnData[]> batchData,
                                                     CassandraToSqlColumnData[] data, String constraint) {
-                if (constraint.equalsIgnoreCase("user_credentials_user_id_key")) {
+                if ("user_credentials_user_id_key".equalsIgnoreCase(constraint)) {
                     String id = UUIDConverter.fromString(this.getColumnData(data, "id").getValue()).toString();
                     log.warn("Found user credentials record with duplicate user_id [id:[{}]]. Record will be ignored!", id);
                     this.ignoreRecord(batchData, data);

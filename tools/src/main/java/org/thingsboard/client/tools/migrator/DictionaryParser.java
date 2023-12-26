@@ -36,7 +36,7 @@ public class DictionaryParser {
     }
 
     private boolean isBlockFinished(String line) {
-        return StringUtils.isBlank(line) || line.equals("\\.");
+        return StringUtils.isBlank(line) || "\\.".equals(line);
     }
 
     private boolean isBlockStarted(String line) {

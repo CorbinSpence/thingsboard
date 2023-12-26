@@ -817,7 +817,7 @@ public abstract class BaseController {
 
     protected void processDashboardIdFromAdditionalInfo(ObjectNode additionalInfo, String requiredFields) throws ThingsboardException {
         String dashboardId = additionalInfo.has(requiredFields) ? additionalInfo.get(requiredFields).asText() : null;
-        if (dashboardId != null && !dashboardId.equals("null")) {
+        if (dashboardId != null && !"null".equals(dashboardId)) {
             if (dashboardService.findDashboardById(getTenantId(), new DashboardId(UUID.fromString(dashboardId))) == null) {
                 additionalInfo.remove(requiredFields);
             }

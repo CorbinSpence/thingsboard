@@ -59,7 +59,7 @@ public class AdminSettingsServiceImpl implements AdminSettingsService {
     public AdminSettings saveAdminSettings(TenantId tenantId, AdminSettings adminSettings) {
         log.trace("Executing saveAdminSettings [{}]", adminSettings);
         adminSettingsValidator.validate(adminSettings, data -> tenantId);
-        if (adminSettings.getKey().equals("mail")){
+        if ("mail".equals(adminSettings.getKey())){
             AdminSettings mailSettings = findAdminSettingsByKey(tenantId, "mail");
             if (mailSettings != null) {
                 JsonNode newJsonValue = adminSettings.getJsonValue();

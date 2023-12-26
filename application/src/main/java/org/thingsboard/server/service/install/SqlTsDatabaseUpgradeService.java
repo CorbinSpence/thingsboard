@@ -95,7 +95,7 @@ public class SqlTsDatabaseUpgradeService extends AbstractSqlTsDatabaseUpgradeSer
                             loadSql(conn, LOAD_FUNCTIONS_SQL, "2.4.3");
                             log.info("Updating timeseries schema ...");
                             executeQuery(conn, CALL_CREATE_PARTITION_TS_KV_TABLE);
-                            if (!partitionType.equals("INDEFINITE")) {
+                            if (!"INDEFINITE".equals(partitionType)) {
                                 executeQuery(conn, "call create_partitions('" + partitionType + "')");
                             }
                             executeQuery(conn, CALL_CREATE_TS_KV_DICTIONARY_TABLE);

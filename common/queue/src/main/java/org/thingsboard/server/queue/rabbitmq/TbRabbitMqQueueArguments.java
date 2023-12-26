@@ -79,7 +79,7 @@ public class TbRabbitMqQueueArguments {
     }
 
     private static Object getObjectValue(String str) {
-        if (str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false")) {
+        if ("true".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str)) {
             return Boolean.valueOf(str);
         } else if (isNumeric(str)) {
             return getNumericValue(str);

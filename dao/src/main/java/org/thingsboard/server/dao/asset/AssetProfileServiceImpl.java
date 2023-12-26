@@ -211,7 +211,7 @@ public class AssetProfileServiceImpl extends AbstractCachedEntityService<AssetPr
         AssetProfile assetProfile = findAssetProfileByName(tenantId, name);
         if (assetProfile == null) {
             try {
-                assetProfile = this.doCreateDefaultAssetProfile(tenantId, name, name.equals("default"));
+                assetProfile = this.doCreateDefaultAssetProfile(tenantId, name, "default".equals(name));
             } catch (DataValidationException e) {
                 if (ASSET_PROFILE_WITH_SUCH_NAME_ALREADY_EXISTS.equals(e.getMessage())) {
                     assetProfile = findAssetProfileByName(tenantId, name);
