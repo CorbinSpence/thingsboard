@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,14 +79,14 @@ public class SystemInfoController extends BaseController {
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/system/info", method = RequestMethod.GET)
+    @GetMapping(value = "/system/info")
     @ResponseBody
     public JsonNode getSystemVersionInfo() {
         return buildInfoObject();
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/system/params", method = RequestMethod.GET)
+    @GetMapping(value = "/system/params")
     @ResponseBody
     public SystemParams getSystemParams() throws ThingsboardException {
         SystemParams systemParams = new SystemParams();

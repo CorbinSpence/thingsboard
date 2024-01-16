@@ -21,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,7 +61,7 @@ public class Lwm2mController extends BaseController {
                     TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/lwm2m/deviceProfile/bootstrap/{isBootstrapServer}", method = RequestMethod.GET)
+    @GetMapping(value = "/lwm2m/deviceProfile/bootstrap/{isBootstrapServer}")
     @ResponseBody
     public LwM2MServerSecurityConfigDefault getLwm2mBootstrapSecurityInfo(
         @ApiParam(value = IS_BOOTSTRAP_SERVER_PARAM_DESCRIPTION)
@@ -69,7 +71,7 @@ public class Lwm2mController extends BaseController {
 
     @ApiOperation(hidden = true, value = "Save device with credentials (Deprecated)")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/lwm2m/device-credentials", method = RequestMethod.POST)
+    @PostMapping(value = "/lwm2m/device-credentials")
     @ResponseBody
     public Device saveDeviceWithCredentials(@RequestBody Map<Class<?>, Object> deviceWithDeviceCredentials) throws ThingsboardException {
         Device device = checkNotNull(JacksonUtil.convertValue(deviceWithDeviceCredentials.get(Device.class), Device.class));

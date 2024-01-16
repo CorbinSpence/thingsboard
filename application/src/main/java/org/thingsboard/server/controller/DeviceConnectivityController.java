@@ -26,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,7 +78,7 @@ public class DeviceConnectivityController extends BaseController {
                                                     "\"mqtt\":\"mosquitto_pub -d -q 1 -h localhost -t v1/devices/me/telemetry -i myClient1 -u myUsername1 -P myPassword -m {temperature:25}\"," +
                                                     "\"coap\":\"coap-client -m POST coap://localhost:5683/api/v1/0ySs4FTOn5WU15XLmal8/telemetry -t json -e {temperature:25}\"}")}))})
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/device-connectivity/{deviceId}", method = RequestMethod.GET)
+    @GetMapping(value = "/device-connectivity/{deviceId}")
     @ResponseBody
     public JsonNode getDevicePublishTelemetryCommands(@ApiParam(value = DEVICE_ID_PARAM_DESCRIPTION)
                                                       @PathVariable(DEVICE_ID) String strDeviceId, HttpServletRequest request) throws ThingsboardException, URISyntaxException {
@@ -103,7 +104,7 @@ public class DeviceConnectivityController extends BaseController {
                                                     "    \"windows\": \"docker run --rm -it -v %HOMEPATH%/tb-gateway/logs:/thingsboard_gateway/logs -v %HOMEPATH%/tb-gateway/extensions:/thingsboard_gateway/extensions -v %HOMEPATH%/tb-gateway/config:/thingsboard_gateway/config --name tbGateway127001 -e host=localhost -e port=1883 -e accessToken=qTe5oDBHPJf0KCSKO8J3 --restart always thingsboard/tb-gateway\"}\n" +
                                                     "}")}))})
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/device-connectivity/gateway-launch/{deviceId}", method = RequestMethod.GET)
+    @GetMapping(value = "/device-connectivity/gateway-launch/{deviceId}")
     @ResponseBody
     public JsonNode getGatewayLaunchCommands(@ApiParam(value = DEVICE_ID_PARAM_DESCRIPTION)
                                                       @PathVariable(DEVICE_ID) String strDeviceId, HttpServletRequest request) throws ThingsboardException, URISyntaxException {
@@ -120,7 +121,7 @@ public class DeviceConnectivityController extends BaseController {
     }
 
     @ApiOperation(value = "Download server certificate using file path defined in device.connectivity properties (downloadServerCertificate)", notes = "Download server certificate.")
-    @RequestMapping(value = "/device-connectivity/{protocol}/certificate/download", method = RequestMethod.GET)
+    @GetMapping(value = "/device-connectivity/{protocol}/certificate/download")
     @ResponseBody
     public ResponseEntity<org.springframework.core.io.Resource> downloadServerCertificate(@ApiParam(value = PROTOCOL_PARAM_DESCRIPTION)
                                                                                           @PathVariable(PROTOCOL) String protocol) throws ThingsboardException, IOException {

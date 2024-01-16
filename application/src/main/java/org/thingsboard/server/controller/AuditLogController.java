@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -76,7 +77,7 @@ public class AuditLogController extends BaseController {
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/audit/logs/customer/{customerId}", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/audit/logs/customer/{customerId}", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<AuditLog> getAuditLogsByCustomerId(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -110,7 +111,7 @@ public class AuditLogController extends BaseController {
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/audit/logs/user/{userId}", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/audit/logs/user/{userId}", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<AuditLog> getAuditLogsByUserId(
             @ApiParam(value = USER_ID_PARAM_DESCRIPTION)
@@ -145,7 +146,7 @@ public class AuditLogController extends BaseController {
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/audit/logs/entity/{entityType}/{entityId}", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/audit/logs/entity/{entityType}/{entityId}", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<AuditLog> getAuditLogsByEntityId(
             @ApiParam(value = ENTITY_TYPE_PARAM_DESCRIPTION, required = true, defaultValue = "DEVICE")
@@ -181,7 +182,7 @@ public class AuditLogController extends BaseController {
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/audit/logs", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/audit/logs", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<AuditLog> getAuditLogs(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION)

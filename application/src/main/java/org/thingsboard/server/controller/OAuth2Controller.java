@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,7 +60,7 @@ public class OAuth2Controller extends BaseController {
     @ApiOperation(value = "Get OAuth2 clients (getOAuth2Clients)", notes = "Get the list of OAuth2 clients " +
             "to log in with, available for such domain scheme (HTTP or HTTPS) (if x-forwarded-proto request header is present - " +
             "the scheme is known from it) and domain name and port (port may be known from x-forwarded-port header)")
-    @RequestMapping(value = "/noauth/oauth2Clients", method = RequestMethod.POST)
+    @PostMapping(value = "/noauth/oauth2Clients")
     @ResponseBody
     public List<OAuth2ClientInfo> getOAuth2Clients(HttpServletRequest request,
                                                    @ApiParam(value = "Mobile application package name, to find OAuth2 clients " +
@@ -88,7 +90,7 @@ public class OAuth2Controller extends BaseController {
 
     @ApiOperation(value = "Get current OAuth2 settings (getCurrentOAuth2Info)", notes = SYSTEM_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/oauth2/config", method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = "/oauth2/config", produces = "application/json")
     @ResponseBody
     public OAuth2Info getCurrentOAuth2Info() throws ThingsboardException {
         accessControlService.checkPermission(getCurrentUser(), Resource.OAUTH2_CONFIGURATION_INFO, Operation.READ);
@@ -97,7 +99,7 @@ public class OAuth2Controller extends BaseController {
 
     @ApiOperation(value = "Save OAuth2 settings (saveOAuth2Info)", notes = SYSTEM_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/oauth2/config", method = RequestMethod.POST)
+    @PostMapping(value = "/oauth2/config")
     @ResponseStatus(value = HttpStatus.OK)
     public OAuth2Info saveOAuth2Info(@RequestBody OAuth2Info oauth2Info) throws ThingsboardException {
         accessControlService.checkPermission(getCurrentUser(), Resource.OAUTH2_CONFIGURATION_INFO, Operation.WRITE);
@@ -110,7 +112,7 @@ public class OAuth2Controller extends BaseController {
             "further log in processing. This URL may be configured as 'security.oauth2.loginProcessingUrl' property in yml configuration file, or " +
             "as 'SECURITY_OAUTH2_LOGIN_PROCESSING_URL' env variable. By default it is '/login/oauth2/code/'" + SYSTEM_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/oauth2/loginProcessingUrl", method = RequestMethod.GET)
+    @GetMapping(value = "/oauth2/loginProcessingUrl")
     @ResponseBody
     public String getLoginProcessingUrl() throws ThingsboardException {
         accessControlService.checkPermission(getCurrentUser(), Resource.OAUTH2_CONFIGURATION_INFO, Operation.READ);

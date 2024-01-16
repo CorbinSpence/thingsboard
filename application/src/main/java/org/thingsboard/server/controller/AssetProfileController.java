@@ -21,7 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,7 +73,7 @@ public class AssetProfileController extends BaseController {
                     "The server checks that the asset profile is owned by the same tenant. " + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/assetProfile/{assetProfileId}", method = RequestMethod.GET)
+    @GetMapping(value = "/assetProfile/{assetProfileId}")
     @ResponseBody
     public AssetProfile getAssetProfileById(
             @ApiParam(value = ASSET_PROFILE_ID_PARAM_DESCRIPTION)
@@ -85,7 +88,7 @@ public class AssetProfileController extends BaseController {
                     + ASSET_PROFILE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/assetProfileInfo/{assetProfileId}", method = RequestMethod.GET)
+    @GetMapping(value = "/assetProfileInfo/{assetProfileId}")
     @ResponseBody
     public AssetProfileInfo getAssetProfileInfoById(
             @ApiParam(value = ASSET_PROFILE_ID_PARAM_DESCRIPTION)
@@ -100,7 +103,7 @@ public class AssetProfileController extends BaseController {
                     ASSET_PROFILE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/assetProfileInfo/default", method = RequestMethod.GET)
+    @GetMapping(value = "/assetProfileInfo/default")
     @ResponseBody
     public AssetProfileInfo getDefaultAssetProfileInfo() throws ThingsboardException {
         return checkNotNull(assetProfileService.findDefaultAssetProfileInfo(getTenantId()));
@@ -117,7 +120,7 @@ public class AssetProfileController extends BaseController {
             produces = "application/json",
             consumes = "application/json")
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/assetProfile", method = RequestMethod.POST)
+    @PostMapping(value = "/assetProfile")
     @ResponseBody
     public AssetProfile saveAssetProfile(
             @ApiParam(value = "A JSON value representing the asset profile.")
@@ -132,7 +135,7 @@ public class AssetProfileController extends BaseController {
                     "Can't delete the asset profile if it is referenced by existing assets." + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/assetProfile/{assetProfileId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/assetProfile/{assetProfileId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteAssetProfile(
             @ApiParam(value = ASSET_PROFILE_ID_PARAM_DESCRIPTION)
@@ -147,7 +150,7 @@ public class AssetProfileController extends BaseController {
             notes = "Marks asset profile as default within a tenant scope." + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/assetProfile/{assetProfileId}/default", method = RequestMethod.POST)
+    @PostMapping(value = "/assetProfile/{assetProfileId}/default")
     @ResponseBody
     public AssetProfile setDefaultAssetProfile(
             @ApiParam(value = ASSET_PROFILE_ID_PARAM_DESCRIPTION)
@@ -164,7 +167,7 @@ public class AssetProfileController extends BaseController {
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/assetProfiles", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/assetProfiles", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<AssetProfile> getAssetProfiles(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -186,7 +189,7 @@ public class AssetProfileController extends BaseController {
                     PAGE_DATA_PARAMETERS + ASSET_PROFILE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/assetProfileInfos", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/assetProfileInfos", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<AssetProfileInfo> getAssetProfileInfos(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)

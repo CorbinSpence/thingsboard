@@ -27,7 +27,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -109,7 +112,7 @@ public class DashboardController extends BaseController {
             notes = "Get the server time (milliseconds since January 1, 1970 UTC). " +
                     "Used to adjust view of the dashboards according to the difference between browser and server time.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/dashboard/serverTime", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard/serverTime")
     @ResponseBody
     @ApiResponse(code = 200, message = "OK", examples = @Example(value = @ExampleProperty(value = "1636023857137", mediaType = "application/json")))
     public long getServerTime() throws ThingsboardException {
@@ -122,7 +125,7 @@ public class DashboardController extends BaseController {
                     "It also impacts the 'Grouping interval' in case of any other 'Data aggregation function' is selected. " +
                     "The actual value of the limit is configurable in the system configuration file.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/dashboard/maxDatapointsLimit", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard/maxDatapointsLimit")
     @ResponseBody
     @ApiResponse(code = 200, message = "OK", examples = @Example(value = @ExampleProperty(value = "5000", mediaType = "application/json")))
     public long getMaxDatapointsLimit() throws ThingsboardException {
@@ -134,7 +137,7 @@ public class DashboardController extends BaseController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/dashboard/info/{dashboardId}", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard/info/{dashboardId}")
     @ResponseBody
     public DashboardInfo getDashboardInfoById(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -149,7 +152,7 @@ public class DashboardController extends BaseController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/dashboard/{dashboardId}", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard getDashboardById(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -169,7 +172,7 @@ public class DashboardController extends BaseController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/dashboard", method = RequestMethod.POST)
+    @PostMapping(value = "/dashboard")
     @ResponseBody
     public Dashboard saveDashboard(
             @ApiParam(value = "A JSON value representing the dashboard.")
@@ -182,7 +185,7 @@ public class DashboardController extends BaseController {
     @ApiOperation(value = "Delete the Dashboard (deleteDashboard)",
             notes = "Delete the Dashboard." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/dashboard/{dashboardId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/dashboard/{dashboardId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteDashboard(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -198,7 +201,7 @@ public class DashboardController extends BaseController {
                     "Returns the Dashboard object." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/dashboard/{dashboardId}", method = RequestMethod.POST)
+    @PostMapping(value = "/customer/{customerId}/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard assignDashboardToCustomer(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -221,7 +224,7 @@ public class DashboardController extends BaseController {
                     "Returns the Dashboard object." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/dashboard/{dashboardId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/customer/{customerId}/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard unassignDashboardFromCustomer(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -244,7 +247,7 @@ public class DashboardController extends BaseController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
 
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/dashboard/{dashboardId}/customers", method = RequestMethod.POST)
+    @PostMapping(value = "/dashboard/{dashboardId}/customers")
     @ResponseBody
     public Dashboard updateDashboardCustomers(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -264,7 +267,7 @@ public class DashboardController extends BaseController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/dashboard/{dashboardId}/customers/add", method = RequestMethod.POST)
+    @PostMapping(value = "/dashboard/{dashboardId}/customers/add")
     @ResponseBody
     public Dashboard addDashboardCustomers(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -284,7 +287,7 @@ public class DashboardController extends BaseController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/dashboard/{dashboardId}/customers/remove", method = RequestMethod.POST)
+    @PostMapping(value = "/dashboard/{dashboardId}/customers/remove")
     @ResponseBody
     public Dashboard removeDashboardCustomers(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -307,7 +310,7 @@ public class DashboardController extends BaseController {
                     "Returns the Dashboard object." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/public/dashboard/{dashboardId}", method = RequestMethod.POST)
+    @PostMapping(value = "/customer/public/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard assignDashboardToPublicCustomer(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -323,7 +326,7 @@ public class DashboardController extends BaseController {
                     "Returns the Dashboard object." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/public/dashboard/{dashboardId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/customer/public/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard unassignDashboardFromPublicCustomer(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)
@@ -339,7 +342,7 @@ public class DashboardController extends BaseController {
                     SYSTEM_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant/{tenantId}/dashboards", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/{tenantId}/dashboards", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<DashboardInfo> getTenantDashboards(
             @ApiParam(value = TENANT_ID_PARAM_DESCRIPTION, required = true)
@@ -365,7 +368,7 @@ public class DashboardController extends BaseController {
                     + DASHBOARD_INFO_DEFINITION + " " + PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/dashboards", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/dashboards", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<DashboardInfo> getTenantDashboards(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -394,7 +397,7 @@ public class DashboardController extends BaseController {
                     + DASHBOARD_INFO_DEFINITION + " " + PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/dashboards", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/dashboards", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<DashboardInfo> getCustomerDashboards(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION, required = true)
@@ -430,7 +433,7 @@ public class DashboardController extends BaseController {
                     + DASHBOARD_DEFINITION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/dashboard/home", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard/home")
     @ResponseBody
     public HomeDashboard getHomeDashboard() throws ThingsboardException {
         SecurityUser securityUser = getCurrentUser();
@@ -463,7 +466,7 @@ public class DashboardController extends BaseController {
                     TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/dashboard/home/info", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard/home/info")
     @ResponseBody
     public HomeDashboardInfo getHomeDashboardInfo() throws ThingsboardException {
         SecurityUser securityUser = getCurrentUser();
@@ -494,7 +497,7 @@ public class DashboardController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/dashboard/home/info", method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/dashboard/home/info")
     @ResponseBody
     public HomeDashboardInfo getTenantHomeDashboardInfo() throws ThingsboardException {
         Tenant tenant = tenantService.findTenantById(getTenantId());
@@ -516,7 +519,7 @@ public class DashboardController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/dashboard/home/info", method = RequestMethod.POST)
+    @PostMapping(value = "/tenant/dashboard/home/info")
     @ResponseStatus(value = HttpStatus.OK)
     public void setTenantHomeDashboardInfo(
             @ApiParam(value = "A JSON object that represents home dashboard id and other parameters", required = true)
@@ -584,7 +587,7 @@ public class DashboardController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/dashboard/{dashboardId}", method = RequestMethod.POST)
+    @PostMapping(value = "/edge/{edgeId}/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard assignDashboardToEdge(@PathVariable("edgeId") String strEdgeId,
                                            @PathVariable(DASHBOARD_ID) String strDashboardId) throws ThingsboardException {
@@ -608,7 +611,7 @@ public class DashboardController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/dashboard/{dashboardId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/edge/{edgeId}/dashboard/{dashboardId}")
     @ResponseBody
     public Dashboard unassignDashboardFromEdge(@PathVariable("edgeId") String strEdgeId,
                                                @PathVariable(DASHBOARD_ID) String strDashboardId) throws ThingsboardException {
@@ -629,7 +632,7 @@ public class DashboardController extends BaseController {
                     + DASHBOARD_INFO_DEFINITION + " " + PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edge/{edgeId}/dashboards", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/edge/{edgeId}/dashboards", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<DashboardInfo> getEdgeDashboards(
             @ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
