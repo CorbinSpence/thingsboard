@@ -166,11 +166,11 @@ public class PgCaMigrator {
     }
 
     private void addValues(List<Object> result, List<String> raw) {
-        result.add(raw.get(3).equals("\\N") ? null : raw.get(3).equals("t") ? Boolean.TRUE : Boolean.FALSE);
-        result.add(raw.get(4).equals("\\N") ? null : raw.get(4));
-        result.add(raw.get(5).equals("\\N") ? null : Long.parseLong(raw.get(5)));
-        result.add(raw.get(6).equals("\\N") ? null : Double.parseDouble(raw.get(6)));
-        result.add(raw.get(7).equals("\\N") ? null : raw.get(7));
+        result.add("\\N".equals(raw.get(3)) ? null : "t".equals(raw.get(3)) ? Boolean.TRUE : Boolean.FALSE);
+        result.add("\\N".equals(raw.get(4)) ? null : raw.get(4));
+        result.add("\\N".equals(raw.get(5)) ? null : Long.parseLong(raw.get(5)));
+        result.add("\\N".equals(raw.get(6)) ? null : Double.parseDouble(raw.get(6)));
+        result.add("\\N".equals(raw.get(7)) ? null : raw.get(7));
     }
 
     private List<Object> toValuesTs(List<String> raw) {
@@ -268,7 +268,7 @@ public class PgCaMigrator {
     }
 
     private boolean isBlockFinished(String line) {
-        return StringUtils.isBlank(line) || line.equals("\\.");
+        return StringUtils.isBlank(line) || "\\.".equals(line);
     }
 
     private boolean isBlockTsStarted(String line) {

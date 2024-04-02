@@ -133,7 +133,7 @@ public class AdminController extends BaseController {
             @PathVariable("key") String key) throws ThingsboardException {
         accessControlService.checkPermission(getCurrentUser(), Resource.ADMIN_SETTINGS, Operation.READ);
         AdminSettings adminSettings = checkNotNull(adminSettingsService.findAdminSettingsByKey(TenantId.SYS_TENANT_ID, key), "No Administration settings found for key: " + key);
-        if (adminSettings.getKey().equals("mail")) {
+        if ("mail".equals(adminSettings.getKey())) {
             ((ObjectNode) adminSettings.getJsonValue()).remove("password");
             ((ObjectNode) adminSettings.getJsonValue()).remove("refreshToken");
         }
@@ -153,11 +153,11 @@ public class AdminController extends BaseController {
         accessControlService.checkPermission(getCurrentUser(), Resource.ADMIN_SETTINGS, Operation.WRITE);
         adminSettings.setTenantId(getTenantId());
         adminSettings = checkNotNull(adminSettingsService.saveAdminSettings(TenantId.SYS_TENANT_ID, adminSettings));
-        if (adminSettings.getKey().equals("mail")) {
+        if ("mail".equals(adminSettings.getKey())) {
             mailService.updateMailConfiguration();
             ((ObjectNode) adminSettings.getJsonValue()).remove("password");
             ((ObjectNode) adminSettings.getJsonValue()).remove("refreshToken");
-        } else if (adminSettings.getKey().equals("sms")) {
+        } else if ("sms".equals(adminSettings.getKey())) {
             smsService.updateSmsConfiguration();
         }
         return adminSettings;
@@ -222,7 +222,7 @@ public class AdminController extends BaseController {
             @RequestBody AdminSettings adminSettings) throws ThingsboardException {
         accessControlService.checkPermission(getCurrentUser(), Resource.ADMIN_SETTINGS, Operation.READ);
         adminSettings = checkNotNull(adminSettings);
-        if (adminSettings.getKey().equals("mail")) {
+        if ("mail".equals(adminSettings.getKey())) {
             if (adminSettings.getJsonValue().has("enableOauth2") && adminSettings.getJsonValue().get("enableOauth2").asBoolean()){
                 AdminSettings mailSettings = checkNotNull(adminSettingsService.findAdminSettingsByKey(TenantId.SYS_TENANT_ID, "mail"));
                 JsonNode refreshToken = mailSettings.getJsonValue().get("refreshToken");

@@ -357,7 +357,7 @@ public class WidgetTypeController extends AutoCommitController {
             @RequestParam String fqn) throws ThingsboardException {
         String[] parts = fqn.split("\\.");
         String scopeQualifier = parts.length > 0 ? parts[0] : null;
-        if (parts.length < 2 || (!scopeQualifier.equals("system") && !scopeQualifier.equals("tenant"))) {
+        if (parts.length < 2 || (!"system".equals(scopeQualifier) && !"tenant".equals(scopeQualifier))) {
             throw new ThingsboardException("Invalid fqn!", ThingsboardErrorCode.BAD_REQUEST_PARAMS);
         }
         TenantId tenantId;

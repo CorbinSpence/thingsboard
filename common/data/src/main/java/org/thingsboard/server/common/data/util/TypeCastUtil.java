@@ -38,7 +38,7 @@ public class TypeCastUtil {
                     return Pair.of(DataType.LONG, bd.longValueExact());
                 }
             } catch (RuntimeException ignored) {}
-        } else if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+        } else if ("true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
             return Pair.of(DataType.BOOLEAN, Boolean.parseBoolean(value));
         }
         return Pair.of(DataType.STRING, value);

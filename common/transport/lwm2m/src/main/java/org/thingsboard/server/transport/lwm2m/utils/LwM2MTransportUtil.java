@@ -383,7 +383,7 @@ public class LwM2MTransportUtil {
             case GREATER_THAN:
             case LESSER_THAN:
             case STEP:
-                if (value.getClass().getSimpleName().equals("String")) {
+                if ("String".equals(value.getClass().getSimpleName())) {
                     value = Double.valueOf((String) value);
                 }
                 return serviceImpl.getConverter().convertValue(value, equalsResourceTypeGetSimpleName(value), FLOAT, new LwM2mPath(target));
