@@ -24,7 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -123,7 +126,7 @@ public class RpcV2Controller extends AbstractRpcController {
             @ApiResponse(code = 504, message = "Timeout to process the RPC call. Most likely, device is offline."),
     })
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/oneway/{deviceId}", method = RequestMethod.POST)
+    @PostMapping(value = "/oneway/{deviceId}")
     @ResponseBody
     public DeferredResult<ResponseEntity> handleOneWayDeviceRPCRequest(
             @ApiParam(value = DEVICE_ID_PARAM_DESCRIPTION)
@@ -141,7 +144,7 @@ public class RpcV2Controller extends AbstractRpcController {
             @ApiResponse(code = 504, message = "Timeout to process the RPC call. Most likely, device is offline."),
     })
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/twoway/{deviceId}", method = RequestMethod.POST)
+    @PostMapping(value = "/twoway/{deviceId}")
     @ResponseBody
     public DeferredResult<ResponseEntity> handleTwoWayDeviceRPCRequest(
             @ApiParam(value = DEVICE_ID_PARAM_DESCRIPTION)
@@ -153,7 +156,7 @@ public class RpcV2Controller extends AbstractRpcController {
 
     @ApiOperation(value = "Get persistent RPC request", notes = "Get information about the status of the RPC call." + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/persistent/{rpcId}", method = RequestMethod.GET)
+    @GetMapping(value = "/persistent/{rpcId}")
     @ResponseBody
     public Rpc getPersistedRpc(
             @ApiParam(value = RPC_ID_PARAM_DESCRIPTION, required = true)
@@ -165,7 +168,7 @@ public class RpcV2Controller extends AbstractRpcController {
 
     @ApiOperation(value = "Get persistent RPC requests", notes = "Allows to query RPC calls for specific device using pagination." + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/persistent/device/{deviceId}", method = RequestMethod.GET)
+    @GetMapping(value = "/persistent/device/{deviceId}")
     @ResponseBody
     public DeferredResult<ResponseEntity> getPersistedRpcByDevice(
             @ApiParam(value = DEVICE_ID_PARAM_DESCRIPTION, required = true)
@@ -220,7 +223,7 @@ public class RpcV2Controller extends AbstractRpcController {
 
     @ApiOperation(value = "Delete persistent RPC", notes = "Deletes the persistent RPC request." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/persistent/{rpcId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/persistent/{rpcId}")
     @ResponseBody
     public void deleteRpc(
             @ApiParam(value = RPC_ID_PARAM_DESCRIPTION, required = true)

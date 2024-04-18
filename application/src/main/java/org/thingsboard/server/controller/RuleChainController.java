@@ -28,7 +28,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -160,7 +163,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Get Rule Chain (getRuleChainById)",
             notes = "Fetch the Rule Chain object based on the provided Rule Chain Id. " + RULE_CHAIN_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChain/{ruleChainId}")
     @ResponseBody
     public RuleChain getRuleChainById(
             @ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
@@ -174,7 +177,7 @@ public class RuleChainController extends BaseController {
             notes = "Fetch the unique labels for the \"output\" Rule Nodes that belong to the Rule Chain based on the provided Rule Chain Id. "
                     + RULE_CHAIN_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/output/labels", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChain/{ruleChainId}/output/labels")
     @ResponseBody
     public Set<String> getRuleChainOutputLabels(
             @ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
@@ -189,7 +192,7 @@ public class RuleChainController extends BaseController {
             notes = "Fetch the list of rule chains and the relation types (labels) they use to process output of the current rule chain based on the provided Rule Chain Id. "
                     + RULE_CHAIN_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/output/labels/usage", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChain/{ruleChainId}/output/labels/usage")
     @ResponseBody
     public List<RuleChainOutputLabelsUsage> getRuleChainOutputLabelsUsage(
             @ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
@@ -203,7 +206,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Get Rule Chain (getRuleChainById)",
             notes = "Fetch the Rule Chain Metadata object based on the provided Rule Chain Id. " + RULE_CHAIN_METADATA_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/metadata", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChain/{ruleChainId}/metadata")
     @ResponseBody
     public RuleChainMetaData getRuleChainMetaData(
             @ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
@@ -223,7 +226,7 @@ public class RuleChainController extends BaseController {
                     "Remove 'id', 'tenantId' from the request body example (below) to create new Rule Chain entity." +
                     TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain")
     @ResponseBody
     public RuleChain saveRuleChain(
             @ApiParam(value = "A JSON value representing the rule chain.")
@@ -237,7 +240,7 @@ public class RuleChainController extends BaseController {
             notes = "Create rule chain from template, based on the specified name in the request. " +
                     "Creates the rule chain based on the template that is used to create root rule chain. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/device/default", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain/device/default")
     @ResponseBody
     public RuleChain saveRuleChain(
             @ApiParam(value = "A JSON value representing the request.")
@@ -250,7 +253,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Set Root Rule Chain (setRootRuleChain)",
             notes = "Makes the rule chain to be root rule chain. Updates previous root rule chain as well. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/root", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain/{ruleChainId}/root")
     @ResponseBody
     public RuleChain setRootRuleChain(
             @ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
@@ -264,7 +267,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Update Rule Chain Metadata",
             notes = "Updates the rule chain metadata. " + RULE_CHAIN_METADATA_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/metadata", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain/metadata")
     @ResponseBody
     public RuleChainMetaData saveRuleChainMetaData(
             @ApiParam(value = "A JSON value representing the rule chain metadata.")
@@ -288,7 +291,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Get Rule Chains (getRuleChains)",
             notes = "Returns a page of Rule Chains owned by tenant. " + RULE_CHAIN_DESCRIPTION + PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChains", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChains", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<RuleChain> getRuleChains(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -316,7 +319,7 @@ public class RuleChainController extends BaseController {
             notes = "Deletes the rule chain. Referencing non-existing rule chain Id will cause an error. " +
                     "Referencing rule chain that is used in the device profiles will cause an error." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/ruleChain/{ruleChainId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteRuleChain(
             @ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
@@ -331,7 +334,7 @@ public class RuleChainController extends BaseController {
             notes = "Gets the input message from the debug events for specified Rule Chain Id. " +
                     "Referencing non-existing rule chain Id will cause an error. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleNode/{ruleNodeId}/debugIn", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleNode/{ruleNodeId}/debugIn")
     @ResponseBody
     public JsonNode getLatestRuleNodeDebugInput(
             @ApiParam(value = RULE_NODE_ID_PARAM_DESCRIPTION)
@@ -357,7 +360,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Is TBEL script executor enabled",
             notes = "Returns 'True' if the TBEL script execution is enabled" + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/tbelEnabled", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChain/tbelEnabled")
     @ResponseBody
     public Boolean isTbelEnabled() {
         return tbelEnabled;
@@ -366,7 +369,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Test Script function",
             notes = TEST_SCRIPT_FUNCTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/testScript", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain/testScript")
     @ResponseBody
     public JsonNode testScript(
             @ApiParam(value = "Script language: JS or TBEL")
@@ -440,7 +443,7 @@ public class RuleChainController extends BaseController {
 
     @ApiOperation(value = "Export Rule Chains", notes = "Exports all tenant rule chains as one JSON." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChains/export", params = {"limit"}, method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChains/export", params = {"limit"})
     @ResponseBody
     public RuleChainData exportRuleChains(
             @ApiParam(value = "A limit of rule chains to export.", required = true)
@@ -452,7 +455,7 @@ public class RuleChainController extends BaseController {
 
     @ApiOperation(value = "Import Rule Chains", notes = "Imports all tenant rule chains as one JSON." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChains/import", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChains/import")
     @ResponseBody
     public List<RuleChainImportResult> importRuleChains(
             @ApiParam(value = "A JSON value representing the rule chains.")
@@ -509,7 +512,7 @@ public class RuleChainController extends BaseController {
                     "\n\nOnly rule chain with type 'EDGE' can be assigned to edge." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/ruleChain/{ruleChainId}", method = RequestMethod.POST)
+    @PostMapping(value = "/edge/{edgeId}/ruleChain/{ruleChainId}")
     @ResponseBody
     public RuleChain assignRuleChainToEdge(@PathVariable("edgeId") String strEdgeId,
                                            @PathVariable(RULE_CHAIN_ID) String strRuleChainId) throws ThingsboardException {
@@ -532,7 +535,7 @@ public class RuleChainController extends BaseController {
                     "Third, once 'unassign' command will be delivered to edge service, it's going to remove rule chain locally." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/ruleChain/{ruleChainId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/edge/{edgeId}/ruleChain/{ruleChainId}")
     @ResponseBody
     public RuleChain unassignRuleChainFromEdge(@PathVariable("edgeId") String strEdgeId,
                                                @PathVariable(RULE_CHAIN_ID) String strRuleChainId) throws ThingsboardException {
@@ -549,7 +552,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Get Edge Rule Chains (getEdgeRuleChains)",
             notes = "Returns a page of Rule Chains assigned to the specified edge. " + RULE_CHAIN_DESCRIPTION + PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/ruleChains", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/edge/{edgeId}/ruleChains", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<RuleChain> getEdgeRuleChains(
             @ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
@@ -576,7 +579,7 @@ public class RuleChainController extends BaseController {
             notes = "Makes the rule chain to be root rule chain for any new edge that will be created. " +
                     "Does not update root rule chain for already created edges. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/edgeTemplateRoot", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain/{ruleChainId}/edgeTemplateRoot")
     @ResponseBody
     public RuleChain setEdgeTemplateRootRuleChain(@ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
                                                   @PathVariable(RULE_CHAIN_ID) String strRuleChainId) throws ThingsboardException {
@@ -590,7 +593,7 @@ public class RuleChainController extends BaseController {
             notes = "Makes the rule chain to be automatically assigned for any new edge that will be created. " +
                     "Does not assign this rule chain for already created edges. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/autoAssignToEdge", method = RequestMethod.POST)
+    @PostMapping(value = "/ruleChain/{ruleChainId}/autoAssignToEdge")
     @ResponseBody
     public RuleChain setAutoAssignToEdgeRuleChain(@ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
                                                   @PathVariable(RULE_CHAIN_ID) String strRuleChainId) throws ThingsboardException {
@@ -604,7 +607,7 @@ public class RuleChainController extends BaseController {
             notes = "Removes the rule chain from the list of rule chains that are going to be automatically assigned for any new edge that will be created. " +
                     "Does not unassign this rule chain for already assigned edges. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/{ruleChainId}/autoAssignToEdge", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/ruleChain/{ruleChainId}/autoAssignToEdge")
     @ResponseBody
     public RuleChain unsetAutoAssignToEdgeRuleChain(@ApiParam(value = RULE_CHAIN_ID_PARAM_DESCRIPTION)
                                                     @PathVariable(RULE_CHAIN_ID) String strRuleChainId) throws ThingsboardException {
@@ -618,7 +621,7 @@ public class RuleChainController extends BaseController {
     @ApiOperation(value = "Get Auto Assign To Edge Rule Chains (getAutoAssignToEdgeRuleChains)",
             notes = "Returns a list of Rule Chains that will be assigned to a newly created edge. " + RULE_CHAIN_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/ruleChain/autoAssignToEdgeRuleChains", method = RequestMethod.GET)
+    @GetMapping(value = "/ruleChain/autoAssignToEdgeRuleChains")
     @ResponseBody
     public List<RuleChain> getAutoAssignToEdgeRuleChains() throws ThingsboardException {
         TenantId tenantId = getCurrentUser().getTenantId();

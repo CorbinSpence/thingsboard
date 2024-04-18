@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -138,7 +139,7 @@ public class UserController extends BaseController {
                     "If the user has the authority of 'TENANT_ADMIN', the server checks that the requested user is owned by the same tenant. " +
                     "If the user has the authority of 'CUSTOMER_USER', the server checks that the requested user is owned by the same customer.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    @GetMapping(value = "/user/{userId}")
     @ResponseBody
     public User getUserById(
             @ApiParam(value = USER_ID_PARAM_DESCRIPTION)
@@ -163,7 +164,7 @@ public class UserController extends BaseController {
                     "If the user who performs the request has the authority of 'SYS_ADMIN', it is possible to login as any tenant administrator. " +
                     "If the user who performs the request has the authority of 'TENANT_ADMIN', it is possible to login as any customer user. ")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/user/tokenAccessEnabled", method = RequestMethod.GET)
+    @GetMapping(value = "/user/tokenAccessEnabled")
     @ResponseBody
     public boolean isUserTokenAccessEnabled() {
         return userTokenAccessEnabled;
@@ -174,7 +175,7 @@ public class UserController extends BaseController {
                     "If the user who performs the request has the authority of 'SYS_ADMIN', it is possible to get the token of any tenant administrator. " +
                     "If the user who performs the request has the authority of 'TENANT_ADMIN', it is possible to get the token of any customer user that belongs to the same tenant. ")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/user/{userId}/token", method = RequestMethod.GET)
+    @GetMapping(value = "/user/{userId}/token")
     @ResponseBody
     public JwtPair getUserToken(
             @ApiParam(value = USER_ID_PARAM_DESCRIPTION)
@@ -202,7 +203,7 @@ public class UserController extends BaseController {
                     "Remove 'id', 'tenantId' and optionally 'customerId' from the request body example (below) to create new User entity." +
                     "\n\nAvailable for users with 'SYS_ADMIN', 'TENANT_ADMIN' or 'CUSTOMER_USER' authority.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @PostMapping(value = "/user")
     @ResponseBody
     public User saveUser(
             @ApiParam(value = "A JSON value representing the User.", required = true)
@@ -219,7 +220,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Send or re-send the activation email",
             notes = "Force send the activation email to the user. Useful to resend the email if user has accidentally deleted it. " + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/user/sendActivationMail", method = RequestMethod.POST)
+    @PostMapping(value = "/user/sendActivationMail")
     @ResponseStatus(value = HttpStatus.OK)
     public void sendActivationEmail(
             @ApiParam(value = "Email of the user", required = true)
@@ -245,7 +246,7 @@ public class UserController extends BaseController {
             notes = "Get the activation link for the user. " +
                     "The base url for activation link is configurable in the general settings of system administrator. " + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/user/{userId}/activationLink", method = RequestMethod.GET, produces = "text/plain")
+    @GetMapping(value = "/user/{userId}/activationLink", produces = "text/plain")
     @ResponseBody
     public String getActivationLink(
             @ApiParam(value = USER_ID_PARAM_DESCRIPTION)
@@ -270,7 +271,7 @@ public class UserController extends BaseController {
             notes = "Deletes the User, it's credentials and all the relations (from and to the User). " +
                     "Referencing non-existing User Id will cause an error. " + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/user/{userId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteUser(
             @ApiParam(value = USER_ID_PARAM_DESCRIPTION)
@@ -288,7 +289,7 @@ public class UserController extends BaseController {
             notes = "Returns a page of users owned by tenant or customer. The scope depends on authority of the user that performs the request." +
                     PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/users", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/users", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<User> getUsers(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -314,7 +315,7 @@ public class UserController extends BaseController {
             notes = "Returns page of user data objects. Search is been executed by email, firstName and " +
                     "lastName fields. " + PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/users/info", method = RequestMethod.GET)
+    @GetMapping(value = "/users/info")
     @ResponseBody
     public PageData<UserEmailInfo> findUsersByQuery(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -351,7 +352,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Get Tenant Users (getTenantAdmins)",
             notes = "Returns a page of users owned by tenant. " + PAGE_DATA_PARAMETERS + SYSTEM_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant/{tenantId}/users", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/{tenantId}/users", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<User> getTenantAdmins(
             @ApiParam(value = TENANT_ID_PARAM_DESCRIPTION, required = true)
@@ -375,7 +376,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Get Customer Users (getCustomerUsers)",
             notes = "Returns a page of users owned by customer. " + PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/users", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/users", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<User> getCustomerUsers(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION, required = true)
@@ -401,7 +402,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Enable/Disable User credentials (setUserCredentialsEnabled)",
             notes = "Enables or Disables user credentials. Useful when you would like to block user account without deleting it. " + PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/user/{userId}/userCredentialsEnabled", method = RequestMethod.POST)
+    @PostMapping(value = "/user/{userId}/userCredentialsEnabled")
     @ResponseBody
     public void setUserCredentialsEnabled(
             @ApiParam(value = USER_ID_PARAM_DESCRIPTION)
@@ -424,7 +425,7 @@ public class UserController extends BaseController {
                     "Search is been executed by email, firstName and lastName fields. " +
                     PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/users/assign/{alarmId}", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/users/assign/{alarmId}", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<UserEmailInfo> getUsersForAssign(
             @ApiParam(value = ALARM_ID_PARAM_DESCRIPTION, required = true)
@@ -507,7 +508,7 @@ public class UserController extends BaseController {
             notes = "Delete user settings by specifying list of json element xpaths. \n " +
                     "Example: to delete B and C element in { \"A\": {\"B\": 5}, \"C\": 15} send A.B,C in jsonPaths request parameter")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/user/settings/{paths}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/user/settings/{paths}")
     public void deleteUserSettings(@ApiParam(value = PATHS)
                                    @PathVariable(PATHS) String paths) throws ThingsboardException {
         checkParameter(USER_ID, paths);
@@ -547,7 +548,7 @@ public class UserController extends BaseController {
             notes = "Delete user settings by specifying list of json element xpaths. \n " +
                     "Example: to delete B and C element in { \"A\": {\"B\": 5}, \"C\": 15} send A.B,C in jsonPaths request parameter")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/user/settings/{type}/{paths}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/user/settings/{type}/{paths}")
     public void deleteUserSettings(@ApiParam(value = PATHS)
                                    @PathVariable(PATHS) String paths,
                                    @ApiParam(value = "Settings type, case insensitive, one of: \"general\", \"quick_links\", \"doc_links\" or \"dashboards\".")
@@ -571,7 +572,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Report action of User over the dashboard (reportUserDashboardAction)",
             notes = "Report action of User over the dashboard. " + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/user/dashboards/{dashboardId}/{action}", method = RequestMethod.GET)
+    @GetMapping(value = "/user/dashboards/{dashboardId}/{action}")
     @ResponseBody
     public UserDashboardsInfo reportUserDashboardAction(
             @ApiParam(value = DASHBOARD_ID_PARAM_DESCRIPTION)

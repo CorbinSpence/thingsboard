@@ -27,6 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -84,7 +86,7 @@ public class AuthController extends BaseController {
     @ApiOperation(value = "Get current User (getUser)",
             notes = "Get the information about the User which credentials are used to perform this REST API call.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/auth/user", method = RequestMethod.GET)
+    @GetMapping(value = "/auth/user")
     public @ResponseBody
     User getUser() throws ThingsboardException {
         SecurityUser securityUser = getCurrentUser();
@@ -94,7 +96,7 @@ public class AuthController extends BaseController {
     @ApiOperation(value = "Logout (logout)",
             notes = "Special API call to record the 'logout' of the user to the Audit Logs. Since platform uses [JWT](https://jwt.io/), the actual logout is the procedure of clearing the [JWT](https://jwt.io/) token on the client side. ")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
+    @PostMapping(value = "/auth/logout")
     @ResponseStatus(value = HttpStatus.OK)
     public void logout(HttpServletRequest request) throws ThingsboardException {
         logLogoutAction(request);
@@ -103,7 +105,7 @@ public class AuthController extends BaseController {
     @ApiOperation(value = "Change password for current User (changePassword)",
             notes = "Change the password for the User which credentials are used to perform this REST API call. Be aware that previously generated [JWT](https://jwt.io/) tokens will be still valid until they expire.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/auth/changePassword", method = RequestMethod.POST)
+    @PostMapping(value = "/auth/changePassword")
     @ResponseStatus(value = HttpStatus.OK)
     public ObjectNode changePassword(
             @ApiParam(value = "Change Password Request")
@@ -131,7 +133,7 @@ public class AuthController extends BaseController {
 
     @ApiOperation(value = "Get the current User password policy (getUserPasswordPolicy)",
             notes = "API call to get the password policy for the password validation form(s).")
-    @RequestMapping(value = "/noauth/userPasswordPolicy", method = RequestMethod.GET)
+    @GetMapping(value = "/noauth/userPasswordPolicy")
     @ResponseBody
     public UserPasswordPolicy getUserPasswordPolicy() throws ThingsboardException {
         SecuritySettings securitySettings =
@@ -143,7 +145,7 @@ public class AuthController extends BaseController {
             notes = "Checks the activation token and forwards user to 'Create Password' page. " +
                     "If token is valid, returns '303 See Other' (redirect) response code with the correct address of 'Create Password' page and same 'activateToken' specified in the URL parameters. " +
                     "If token is not valid, returns '409 Conflict'.")
-    @RequestMapping(value = "/noauth/activate", params = {"activateToken"}, method = RequestMethod.GET)
+    @GetMapping(value = "/noauth/activate", params = {"activateToken"})
     public ResponseEntity<String> checkActivateToken(
             @ApiParam(value = "The activate token string.")
             @RequestParam(value = "activateToken") String activateToken) {
@@ -169,7 +171,7 @@ public class AuthController extends BaseController {
     @ApiOperation(value = "Request reset password email (requestResetPasswordByEmail)",
             notes = "Request to send the reset password email if the user with specified email address is present in the database. " +
                     "Always return '200 OK' status for security purposes.")
-    @RequestMapping(value = "/noauth/resetPasswordByEmail", method = RequestMethod.POST)
+    @PostMapping(value = "/noauth/resetPasswordByEmail")
     @ResponseStatus(value = HttpStatus.OK)
     public void requestResetPasswordByEmail(
             @ApiParam(value = "The JSON object representing the reset password email request.")
@@ -193,7 +195,7 @@ public class AuthController extends BaseController {
             notes = "Checks the password reset token and forwards user to 'Reset Password' page. " +
                     "If token is valid, returns '303 See Other' (redirect) response code with the correct address of 'Reset Password' page and same 'resetToken' specified in the URL parameters. " +
                     "If token is not valid, returns '409 Conflict'.")
-    @RequestMapping(value = "/noauth/resetPassword", params = {"resetToken"}, method = RequestMethod.GET)
+    @GetMapping(value = "/noauth/resetPassword", params = {"resetToken"})
     public ResponseEntity<String> checkResetToken(
             @ApiParam(value = "The reset token string.")
             @RequestParam(value = "resetToken") String resetToken) {
@@ -227,7 +229,7 @@ public class AuthController extends BaseController {
                     "to simplify the user activation flow and avoid asking user to input password again after activation. " +
                     "If token is valid, returns the object that contains [JWT](https://jwt.io/) access and refresh tokens. " +
                     "If token is not valid, returns '404 Bad Request'.")
-    @RequestMapping(value = "/noauth/activate", method = RequestMethod.POST)
+    @PostMapping(value = "/noauth/activate")
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public JwtPair activateUser(
@@ -263,7 +265,7 @@ public class AuthController extends BaseController {
             notes = "Checks the password reset token and updates the password. " +
                     "If token is valid, returns the object that contains [JWT](https://jwt.io/) access and refresh tokens. " +
                     "If token is not valid, returns '404 Bad Request'.")
-    @RequestMapping(value = "/noauth/resetPassword", method = RequestMethod.POST)
+    @PostMapping(value = "/noauth/resetPassword")
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public JwtPair resetPassword(

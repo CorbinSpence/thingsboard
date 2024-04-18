@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -109,7 +111,7 @@ public class EventController extends BaseController {
             notes = "Returns a page of events for specified entity by specifying event type. " +
                     PAGE_DATA_PARAMETERS, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/events/{entityType}/{entityId}/{eventType}", method = RequestMethod.GET)
+    @GetMapping(value = "/events/{entityType}/{entityId}/{eventType}")
     @ResponseBody
     public PageData<EventInfo> getEvents(
             @ApiParam(value = ENTITY_TYPE_PARAM_DESCRIPTION, required = true)
@@ -151,7 +153,7 @@ public class EventController extends BaseController {
                     "Use 'Get events by type' or 'Get events by filter' instead. " +
                     PAGE_DATA_PARAMETERS, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/events/{entityType}/{entityId}", method = RequestMethod.GET)
+    @GetMapping(value = "/events/{entityType}/{entityId}")
     @ResponseBody
     public PageData<EventInfo> getEvents(
             @ApiParam(value = ENTITY_TYPE_PARAM_DESCRIPTION, required = true)
@@ -192,7 +194,7 @@ public class EventController extends BaseController {
                     EVENT_FILTER_DEFINITION,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/events/{entityType}/{entityId}", method = RequestMethod.POST)
+    @PostMapping(value = "/events/{entityType}/{entityId}")
     @ResponseBody
     public PageData<EventInfo> getEvents(
             @ApiParam(value = ENTITY_TYPE_PARAM_DESCRIPTION, required = true)
@@ -230,7 +232,7 @@ public class EventController extends BaseController {
 
     @ApiOperation(value = "Clear Events (clearEvents)", notes = "Clears events by filter for specified entity.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/events/{entityType}/{entityId}/clear", method = RequestMethod.POST)
+    @PostMapping(value = "/events/{entityType}/{entityId}/clear")
     @ResponseStatus(HttpStatus.OK)
     public void clearEvents(@ApiParam(value = ENTITY_TYPE_PARAM_DESCRIPTION, required = true)
                             @PathVariable(ENTITY_TYPE) String strEntityType,

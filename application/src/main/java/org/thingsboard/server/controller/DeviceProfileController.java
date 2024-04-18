@@ -22,7 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,7 +84,7 @@ public class DeviceProfileController extends BaseController {
                     "The server checks that the device profile is owned by the same tenant. " + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfile/{deviceProfileId}", method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfile/{deviceProfileId}")
     @ResponseBody
     public DeviceProfile getDeviceProfileById(
             @ApiParam(value = DEVICE_PROFILE_ID_PARAM_DESCRIPTION)
@@ -96,7 +99,7 @@ public class DeviceProfileController extends BaseController {
                     + DEVICE_PROFILE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/deviceProfileInfo/{deviceProfileId}", method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfileInfo/{deviceProfileId}")
     @ResponseBody
     public DeviceProfileInfo getDeviceProfileInfoById(
             @ApiParam(value = DEVICE_PROFILE_ID_PARAM_DESCRIPTION)
@@ -111,7 +114,7 @@ public class DeviceProfileController extends BaseController {
                     DEVICE_PROFILE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/deviceProfileInfo/default", method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfileInfo/default")
     @ResponseBody
     public DeviceProfileInfo getDefaultDeviceProfileInfo() throws ThingsboardException {
         return checkNotNull(deviceProfileService.findDefaultDeviceProfileInfo(getTenantId()));
@@ -125,7 +128,7 @@ public class DeviceProfileController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfile/devices/keys/timeseries", method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfile/devices/keys/timeseries")
     @ResponseBody
     public List<String> getTimeseriesKeys(
             @ApiParam(value = DEVICE_PROFILE_ID_PARAM_DESCRIPTION)
@@ -149,7 +152,7 @@ public class DeviceProfileController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfile/devices/keys/attributes", method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfile/devices/keys/attributes")
     @ResponseBody
     public List<String> getAttributesKeys(
             @ApiParam(value = DEVICE_PROFILE_ID_PARAM_DESCRIPTION)
@@ -176,7 +179,7 @@ public class DeviceProfileController extends BaseController {
             produces = "application/json",
             consumes = "application/json")
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfile", method = RequestMethod.POST)
+    @PostMapping(value = "/deviceProfile")
     @ResponseBody
     public DeviceProfile saveDeviceProfile(
             @ApiParam(value = "A JSON value representing the device profile.")
@@ -191,7 +194,7 @@ public class DeviceProfileController extends BaseController {
                     "Can't delete the device profile if it is referenced by existing devices." + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfile/{deviceProfileId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/deviceProfile/{deviceProfileId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteDeviceProfile(
             @ApiParam(value = DEVICE_PROFILE_ID_PARAM_DESCRIPTION)
@@ -206,7 +209,7 @@ public class DeviceProfileController extends BaseController {
             notes = "Marks device profile as default within a tenant scope." + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfile/{deviceProfileId}/default", method = RequestMethod.POST)
+    @PostMapping(value = "/deviceProfile/{deviceProfileId}/default")
     @ResponseBody
     public DeviceProfile setDefaultDeviceProfile(
             @ApiParam(value = DEVICE_PROFILE_ID_PARAM_DESCRIPTION)
@@ -223,7 +226,7 @@ public class DeviceProfileController extends BaseController {
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/deviceProfiles", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfiles", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<DeviceProfile> getDeviceProfiles(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -245,7 +248,7 @@ public class DeviceProfileController extends BaseController {
                     PAGE_DATA_PARAMETERS + DEVICE_PROFILE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = "application/json")
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/deviceProfileInfos", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/deviceProfileInfos", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<DeviceProfileInfo> getDeviceProfileInfos(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)

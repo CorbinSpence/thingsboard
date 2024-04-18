@@ -18,6 +18,7 @@ package org.thingsboard.server.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,7 +52,7 @@ public class ComponentDescriptorController extends BaseController {
             notes = "Gets the Component Descriptor object using class name from the path parameters. " +
                     COMPONENT_DESCRIPTOR_DEFINITION + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN','TENANT_ADMIN')")
-    @RequestMapping(value = "/component/{componentDescriptorClazz:.+}", method = RequestMethod.GET)
+    @GetMapping(value = "/component/{componentDescriptorClazz:.+}")
     @ResponseBody
     public ComponentDescriptor getComponentDescriptorByClazz(
             @ApiParam(value = "Component Descriptor class name", required = true)
@@ -64,7 +65,7 @@ public class ComponentDescriptorController extends BaseController {
             notes = "Gets the Component Descriptors using rule node type and optional rule chain type request parameters. " +
                     COMPONENT_DESCRIPTOR_DEFINITION + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN','TENANT_ADMIN')")
-    @RequestMapping(value = "/components/{componentType}", method = RequestMethod.GET)
+    @GetMapping(value = "/components/{componentType}")
     @ResponseBody
     public List<ComponentDescriptor> getComponentDescriptorsByType(
             @ApiParam(value = "Type of the Rule Node", allowableValues = "ENRICHMENT,FILTER,TRANSFORMATION,ACTION,EXTERNAL", required = true)
@@ -79,7 +80,7 @@ public class ComponentDescriptorController extends BaseController {
             notes = "Gets the Component Descriptors using coma separated list of rule node types and optional rule chain type request parameters. " +
                     COMPONENT_DESCRIPTOR_DEFINITION + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN','TENANT_ADMIN')")
-    @RequestMapping(value = "/components", params = {"componentTypes"}, method = RequestMethod.GET)
+    @GetMapping(value = "/components", params = {"componentTypes"})
     @ResponseBody
     public List<ComponentDescriptor> getComponentDescriptorsByTypes(
             @ApiParam(value = "List of types of the Rule Nodes, (ENRICHMENT, FILTER, TRANSFORMATION, ACTION or EXTERNAL)", required = true)

@@ -22,7 +22,10 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,7 +76,7 @@ public class CustomerController extends BaseController {
             notes = "Get the Customer object based on the provided Customer Id. "
                     + CUSTOMER_SECURITY_CHECK + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}")
     @ResponseBody
     public Customer getCustomerById(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -92,7 +95,7 @@ public class CustomerController extends BaseController {
             notes = "Get the short customer object that contains only the title and 'isPublic' flag. "
                     + CUSTOMER_SECURITY_CHECK + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/shortInfo", method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/shortInfo")
     @ResponseBody
     public JsonNode getShortCustomerInfoById(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -110,7 +113,7 @@ public class CustomerController extends BaseController {
             notes = "Get the title of the customer. "
                     + CUSTOMER_SECURITY_CHECK + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/title", method = RequestMethod.GET, produces = "application/text")
+    @GetMapping(value = "/customer/{customerId}/title", produces = "application/text")
     @ResponseBody
     public String getCustomerTitleById(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -129,7 +132,7 @@ public class CustomerController extends BaseController {
                     "Remove 'id', 'tenantId' from the request body example (below) to create new Customer entity. " +
                     TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer", method = RequestMethod.POST)
+    @PostMapping(value = "/customer")
     @ResponseBody
     public Customer saveCustomer(@ApiParam(value = "A JSON value representing the customer.") @RequestBody Customer customer) throws Exception {
         customer.setTenantId(getTenantId());
@@ -142,7 +145,7 @@ public class CustomerController extends BaseController {
                     "All assigned Dashboards, Assets, Devices, etc. will be unassigned but not deleted. " +
                     "Referencing non-existing Customer Id will cause an error." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/customer/{customerId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteCustomer(@ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
                                @PathVariable(CUSTOMER_ID) String strCustomerId) throws ThingsboardException {
@@ -156,7 +159,7 @@ public class CustomerController extends BaseController {
             notes = "Returns a page of customers owned by tenant. " +
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customers", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customers", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<Customer> getCustomers(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -177,7 +180,7 @@ public class CustomerController extends BaseController {
     @ApiOperation(value = "Get Tenant Customer by Customer title (getTenantCustomer)",
             notes = "Get the Customer using Customer Title. " + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/customers", params = {"customerTitle"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/customers", params = {"customerTitle"})
     @ResponseBody
     public Customer getTenantCustomer(
             @ApiParam(value = "A string value representing the Customer title.")

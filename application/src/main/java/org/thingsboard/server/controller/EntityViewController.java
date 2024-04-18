@@ -23,7 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -100,7 +103,7 @@ public class EntityViewController extends BaseController {
                     + ENTITY_VIEW_DESCRIPTION + MODEL_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/entityView/{entityViewId}", method = RequestMethod.GET)
+    @GetMapping(value = "/entityView/{entityViewId}")
     @ResponseBody
     public EntityView getEntityViewById(
             @ApiParam(value = ENTITY_VIEW_ID_PARAM_DESCRIPTION)
@@ -114,7 +117,7 @@ public class EntityViewController extends BaseController {
                     + ENTITY_VIEW_INFO_DESCRIPTION + MODEL_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/entityView/info/{entityViewId}", method = RequestMethod.GET)
+    @GetMapping(value = "/entityView/info/{entityViewId}")
     @ResponseBody
     public EntityViewInfo getEntityViewInfoById(
             @ApiParam(value = ENTITY_VIEW_ID_PARAM_DESCRIPTION)
@@ -130,7 +133,7 @@ public class EntityViewController extends BaseController {
                     TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/entityView", method = RequestMethod.POST)
+    @PostMapping(value = "/entityView")
     @ResponseBody
     public EntityView saveEntityView(
             @ApiParam(value = "A JSON object representing the entity view.")
@@ -150,7 +153,7 @@ public class EntityViewController extends BaseController {
             notes = "Delete the EntityView object based on the provided entity view id. "
                     + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/entityView/{entityViewId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/entityView/{entityViewId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteEntityView(
             @ApiParam(value = ENTITY_VIEW_ID_PARAM_DESCRIPTION)
@@ -165,7 +168,7 @@ public class EntityViewController extends BaseController {
             notes = "Fetch the Entity View object based on the tenant id and entity view name. " + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/entityViews", params = {"entityViewName"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/entityViews", params = {"entityViewName"})
     @ResponseBody
     public EntityView getTenantEntityView(
             @ApiParam(value = "Entity View name")
@@ -177,7 +180,7 @@ public class EntityViewController extends BaseController {
     @ApiOperation(value = "Assign Entity View to customer (assignEntityViewToCustomer)",
             notes = "Creates assignment of the Entity View to customer. Customer will be able to query Entity View afterwards." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/entityView/{entityViewId}", method = RequestMethod.POST)
+    @PostMapping(value = "/customer/{customerId}/entityView/{entityViewId}")
     @ResponseBody
     public EntityView assignEntityViewToCustomer(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -199,7 +202,7 @@ public class EntityViewController extends BaseController {
     @ApiOperation(value = "Unassign Entity View from customer (unassignEntityViewFromCustomer)",
             notes = "Clears assignment of the Entity View to customer. Customer will not be able to query Entity View afterwards." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/entityView/{entityViewId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/customer/entityView/{entityViewId}")
     @ResponseBody
     public EntityView unassignEntityViewFromCustomer(
             @ApiParam(value = ENTITY_VIEW_ID_PARAM_DESCRIPTION)
@@ -220,7 +223,7 @@ public class EntityViewController extends BaseController {
             notes = "Returns a page of Entity View objects assigned to customer. " +
                     PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/entityViews", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/entityViews", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EntityView> getCustomerEntityViews(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION, required = true)
@@ -253,7 +256,7 @@ public class EntityViewController extends BaseController {
             notes = "Returns a page of Entity View info objects assigned to customer. " + ENTITY_VIEW_DESCRIPTION +
                     PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/entityViewInfos", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/entityViewInfos", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EntityViewInfo> getCustomerEntityViewInfos(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION, required = true)
@@ -286,7 +289,7 @@ public class EntityViewController extends BaseController {
             notes = "Returns a page of entity views owned by tenant. " + ENTITY_VIEW_DESCRIPTION +
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/entityViews", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/entityViews", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EntityView> getTenantEntityViews(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -315,7 +318,7 @@ public class EntityViewController extends BaseController {
             notes = "Returns a page of entity views info owned by tenant. " + ENTITY_VIEW_DESCRIPTION +
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/entityViewInfos", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/entityViewInfos", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EntityViewInfo> getTenantEntityViewInfos(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -344,7 +347,7 @@ public class EntityViewController extends BaseController {
                     "The entity id, relation type, entity view types, depth of the search, and other query parameters defined using complex 'EntityViewSearchQuery' object. " +
                     "See 'Model' tab of the Parameters for more info." + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/entityViews", method = RequestMethod.POST)
+    @PostMapping(value = "/entityViews")
     @ResponseBody
     public List<EntityView> findByQuery(
             @ApiParam(value = "The entity view search query JSON")
@@ -369,7 +372,7 @@ public class EntityViewController extends BaseController {
             notes = "Returns a set of unique entity view types based on entity views that are either owned by the tenant or assigned to the customer which user is performing the request."
                     + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/entityView/types", method = RequestMethod.GET)
+    @GetMapping(value = "/entityView/types")
     @ResponseBody
     public List<EntitySubtype> getEntityViewTypes() throws ThingsboardException, ExecutionException, InterruptedException {
         SecurityUser user = getCurrentUser();
@@ -383,7 +386,7 @@ public class EntityViewController extends BaseController {
                     "This is useful to create dashboards that you plan to share/embed on a publicly available website. " +
                     "However, users that are logged-in and belong to different tenant will not be able to access the entity view." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/public/entityView/{entityViewId}", method = RequestMethod.POST)
+    @PostMapping(value = "/customer/public/entityView/{entityViewId}")
     @ResponseBody
     public EntityView assignEntityViewToPublicCustomer(
             @ApiParam(value = ENTITY_VIEW_ID_PARAM_DESCRIPTION)
@@ -402,7 +405,7 @@ public class EntityViewController extends BaseController {
                     "Third, once entity view will be delivered to edge service, it's going to be available for usage on remote edge instance.",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/entityView/{entityViewId}", method = RequestMethod.POST)
+    @PostMapping(value = "/edge/{edgeId}/entityView/{entityViewId}")
     @ResponseBody
     public EntityView assignEntityViewToEdge(@PathVariable(EDGE_ID) String strEdgeId,
                                              @PathVariable(ENTITY_VIEW_ID) String strEntityViewId) throws ThingsboardException {
@@ -427,7 +430,7 @@ public class EntityViewController extends BaseController {
                     "Third, once 'unassign' command will be delivered to edge service, it's going to remove entity view locally.",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/entityView/{entityViewId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/edge/{edgeId}/entityView/{entityViewId}")
     @ResponseBody
     public EntityView unassignEntityViewFromEdge(@PathVariable(EDGE_ID) String strEdgeId,
                                                  @PathVariable(ENTITY_VIEW_ID) String strEntityViewId) throws ThingsboardException {
@@ -445,7 +448,7 @@ public class EntityViewController extends BaseController {
     }
 
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edge/{edgeId}/entityViews", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/edge/{edgeId}/entityViews", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EntityView> getEdgeEntityViews(
             @PathVariable(EDGE_ID) String strEdgeId,

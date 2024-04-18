@@ -19,7 +19,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,7 +70,7 @@ public class QueueController extends BaseController {
             notes = "Returns a page of queues registered in the platform. " +
                     PAGE_DATA_PARAMETERS + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/queues", params = {"serviceType", "pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/queues", params = {"serviceType", "pageSize", "page"})
     @ResponseBody
     public PageData<Queue> getTenantQueuesByServiceType(@ApiParam(value = QUEUE_SERVICE_TYPE_DESCRIPTION, allowableValues = QUEUE_SERVICE_TYPE_ALLOWABLE_VALUES, required = true)
                                                         @RequestParam String serviceType,
@@ -95,7 +98,7 @@ public class QueueController extends BaseController {
     @ApiOperation(value = "Get Queue (getQueueById)",
             notes = "Fetch the Queue object based on the provided Queue Id. " + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/queues/{queueId}", method = RequestMethod.GET)
+    @GetMapping(value = "/queues/{queueId}")
     @ResponseBody
     public Queue getQueueById(@ApiParam(value = QUEUE_ID_PARAM_DESCRIPTION)
                               @PathVariable("queueId") String queueIdStr) throws ThingsboardException {
@@ -108,7 +111,7 @@ public class QueueController extends BaseController {
     @ApiOperation(value = "Get Queue (getQueueByName)",
             notes = "Fetch the Queue object based on the provided Queue name. " + SYSTEM_OR_TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/queues/name/{queueName}", method = RequestMethod.GET)
+    @GetMapping(value = "/queues/name/{queueName}")
     @ResponseBody
     public Queue getQueueByName(@ApiParam(value = QUEUE_NAME_PARAM_DESCRIPTION)
                                 @PathVariable("queueName") String queueName) throws ThingsboardException {
@@ -124,7 +127,7 @@ public class QueueController extends BaseController {
                     "Remove 'id', 'tenantId' from the request body example (below) to create new Queue entity. " +
                     SYSTEM_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/queues", params = {"serviceType"}, method = RequestMethod.POST)
+    @PostMapping(value = "/queues", params = {"serviceType"})
     @ResponseBody
     public Queue saveQueue(@ApiParam(value = "A JSON value representing the queue.")
                            @RequestBody Queue queue,
@@ -149,7 +152,7 @@ public class QueueController extends BaseController {
 
     @ApiOperation(value = "Delete Queue (deleteQueue)", notes = "Deletes the Queue. " + SYSTEM_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/queues/{queueId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/queues/{queueId}")
     @ResponseBody
     public void deleteQueue(@ApiParam(value = QUEUE_ID_PARAM_DESCRIPTION)
                             @PathVariable("queueId") String queueIdStr) throws ThingsboardException {

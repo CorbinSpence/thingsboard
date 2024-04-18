@@ -24,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -110,7 +112,7 @@ public class EdgeController extends BaseController {
     @ApiOperation(value = "Is edges support enabled (isEdgesSupportEnabled)",
             notes = "Returns 'true' if edges support enabled on server, 'false' - otherwise.")
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edges/enabled", method = RequestMethod.GET)
+    @GetMapping(value = "/edges/enabled")
     @ResponseBody
     public boolean isEdgesSupportEnabled() {
         return edgesEnabled;
@@ -120,7 +122,7 @@ public class EdgeController extends BaseController {
             notes = "Get the Edge object based on the provided Edge Id. " + EDGE_SECURITY_CHECK + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edge/{edgeId}", method = RequestMethod.GET)
+    @GetMapping(value = "/edge/{edgeId}")
     @ResponseBody
     public Edge getEdgeById(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                             @PathVariable(EDGE_ID) String strEdgeId) throws ThingsboardException {
@@ -133,7 +135,7 @@ public class EdgeController extends BaseController {
             notes = "Get the Edge Info object based on the provided Edge Id. " + EDGE_SECURITY_CHECK + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edge/info/{edgeId}", method = RequestMethod.GET)
+    @GetMapping(value = "/edge/info/{edgeId}")
     @ResponseBody
     public EdgeInfo getEdgeInfoById(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                                     @PathVariable(EDGE_ID) String strEdgeId) throws ThingsboardException {
@@ -152,7 +154,7 @@ public class EdgeController extends BaseController {
                     TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge", method = RequestMethod.POST)
+    @PostMapping(value = "/edge")
     @ResponseBody
     public Edge saveEdge(@ApiParam(value = "A JSON value representing the edge.", required = true)
                          @RequestBody Edge edge) throws Exception {
@@ -178,7 +180,7 @@ public class EdgeController extends BaseController {
     @ApiOperation(value = "Delete edge (deleteEdge)",
             notes = "Deletes the edge. Referencing non-existing edge Id will cause an error." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/edge/{edgeId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteEdge(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                            @PathVariable(EDGE_ID) String strEdgeId) throws ThingsboardException {
@@ -192,7 +194,7 @@ public class EdgeController extends BaseController {
             notes = "Returns a page of edges owned by tenant. " +
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edges", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/edges", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<Edge> getEdges(@ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
                                    @RequestParam int pageSize,
@@ -213,7 +215,7 @@ public class EdgeController extends BaseController {
             notes = "Creates assignment of the edge to customer. Customer will be able to query edge afterwards." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/edge/{edgeId}", method = RequestMethod.POST)
+    @PostMapping(value = "/customer/{customerId}/edge/{edgeId}")
     @ResponseBody
     public Edge assignEdgeToCustomer(@ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION, required = true)
                                      @PathVariable("customerId") String strCustomerId,
@@ -232,7 +234,7 @@ public class EdgeController extends BaseController {
             notes = "Clears assignment of the edge to customer. Customer will not be able to query edge afterwards." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/edge/{edgeId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/customer/edge/{edgeId}")
     @ResponseBody
     public Edge unassignEdgeFromCustomer(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                                          @PathVariable(EDGE_ID) String strEdgeId) throws ThingsboardException {
@@ -253,7 +255,7 @@ public class EdgeController extends BaseController {
                     "However, users that are logged-in and belong to different tenant will not be able to access the edge." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/public/edge/{edgeId}", method = RequestMethod.POST)
+    @PostMapping(value = "/customer/public/edge/{edgeId}")
     @ResponseBody
     public Edge assignEdgeToPublicCustomer(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                                            @PathVariable(EDGE_ID) String strEdgeId) throws ThingsboardException {
@@ -267,7 +269,7 @@ public class EdgeController extends BaseController {
             notes = "Returns a page of edges owned by tenant. " +
                     PAGE_DATA_PARAMETERS + TENANT_AUTHORITY_PARAGRAPH, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/edges", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/edges", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<Edge> getTenantEdges(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -296,7 +298,7 @@ public class EdgeController extends BaseController {
                     PAGE_DATA_PARAMETERS + EDGE_INFO_DESCRIPTION + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/edgeInfos", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/edgeInfos", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EdgeInfo> getTenantEdgeInfos(
             @ApiParam(value = PAGE_SIZE_DESCRIPTION, required = true)
@@ -325,7 +327,7 @@ public class EdgeController extends BaseController {
                     "Edge name is an unique property of edge. So it can be used to identify the edge." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/edges", params = {"edgeName"}, method = RequestMethod.GET)
+    @GetMapping(value = "/tenant/edges", params = {"edgeName"})
     @ResponseBody
     public Edge getTenantEdge(@ApiParam(value = "Unique name of the edge", required = true)
                               @RequestParam String edgeName) throws ThingsboardException {
@@ -338,7 +340,7 @@ public class EdgeController extends BaseController {
                     "This operation will send a notification to update root rule chain on remote edge service." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/{edgeId}/{ruleChainId}/root", method = RequestMethod.POST)
+    @PostMapping(value = "/edge/{edgeId}/{ruleChainId}/root")
     @ResponseBody
     public Edge setEdgeRootRuleChain(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                                      @PathVariable(EDGE_ID) String strEdgeId,
@@ -358,7 +360,7 @@ public class EdgeController extends BaseController {
             notes = "Returns a page of edges objects assigned to customer. " +
                     PAGE_DATA_PARAMETERS + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/edges", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/edges", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<Edge> getCustomerEdges(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -394,7 +396,7 @@ public class EdgeController extends BaseController {
             notes = "Returns a page of edges info objects assigned to customer. " +
                     PAGE_DATA_PARAMETERS + EDGE_INFO_DESCRIPTION + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}/edgeInfos", params = {"pageSize", "page"}, method = RequestMethod.GET)
+    @GetMapping(value = "/customer/{customerId}/edgeInfos", params = {"pageSize", "page"})
     @ResponseBody
     public PageData<EdgeInfo> getCustomerEdgeInfos(
             @ApiParam(value = CUSTOMER_ID_PARAM_DESCRIPTION)
@@ -430,7 +432,7 @@ public class EdgeController extends BaseController {
             notes = "Requested edges must be owned by tenant or assigned to customer which user is performing the request." + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edges", params = {"edgeIds"}, method = RequestMethod.GET)
+    @GetMapping(value = "/edges", params = {"edgeIds"})
     @ResponseBody
     public List<Edge> getEdgesByIds(
             @ApiParam(value = "A list of edges ids, separated by comma ','", required = true)
@@ -459,7 +461,7 @@ public class EdgeController extends BaseController {
                     "See 'Model' tab of the Parameters for more info." + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edges", method = RequestMethod.POST)
+    @PostMapping(value = "/edges")
     @ResponseBody
     public List<Edge> findByQuery(@RequestBody EdgeSearchQuery query) throws ThingsboardException, ExecutionException, InterruptedException {
         checkNotNull(query);
@@ -485,7 +487,7 @@ public class EdgeController extends BaseController {
                     + TENANT_OR_CUSTOMER_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/edge/types", method = RequestMethod.GET)
+    @GetMapping(value = "/edge/types")
     @ResponseBody
     public List<EntitySubtype> getEdgeTypes() throws ThingsboardException, ExecutionException, InterruptedException {
         SecurityUser user = getCurrentUser();
@@ -498,7 +500,7 @@ public class EdgeController extends BaseController {
             notes = "Starts synchronization process between edge and cloud. \n" +
                     "All entities that are assigned to particular edge are going to be send to remote edge service." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/sync/{edgeId}", method = RequestMethod.POST)
+    @PostMapping(value = "/edge/sync/{edgeId}")
     public DeferredResult<ResponseEntity> syncEdge(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                          @PathVariable("edgeId") String strEdgeId) throws ThingsboardException {
         checkParameter("edgeId", strEdgeId);
@@ -527,7 +529,7 @@ public class EdgeController extends BaseController {
     @ApiOperation(value = "Find missing rule chains (findMissingToRelatedRuleChains)",
             notes = "Returns list of rule chains ids that are not assigned to particular edge, but these rule chains are present in the already assigned rule chains to edge." + TENANT_AUTHORITY_PARAGRAPH)
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/missingToRelatedRuleChains/{edgeId}", method = RequestMethod.GET)
+    @GetMapping(value = "/edge/missingToRelatedRuleChains/{edgeId}")
     @ResponseBody
     public String findMissingToRelatedRuleChains(@ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
                                                  @PathVariable("edgeId") String strEdgeId) throws ThingsboardException {
@@ -557,7 +559,7 @@ public class EdgeController extends BaseController {
             notes = "Get a docker install instructions for provided edge id." + TENANT_AUTHORITY_PARAGRAPH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/edge/instructions/{edgeId}/{method}", method = RequestMethod.GET)
+    @GetMapping(value = "/edge/instructions/{edgeId}/{method}")
     @ResponseBody
     public EdgeInstallInstructions getEdgeDockerInstallInstructions(
             @ApiParam(value = EDGE_ID_PARAM_DESCRIPTION, required = true)
